@@ -71,6 +71,10 @@ def bob_updating(bob_file, bob_dirname):
             logging.debug(f"the link to the graphical interface: {same_bob} have been updated {i} times")  
 
     #Delete gridLayout widget
+    for gridLayout in root.findall('widget'):
+        if gridLayout is not None and gridLayout.get('typeId') == "org.csstudio.opibuilder.widgets.gridLayout":
+            root.remove(gridLayout)
+            i += 1
     for widget in root.iter('widget'):
         for gridLayout in widget.findall('widget'):
             if gridLayout is not None and gridLayout.get('typeId') == "org.csstudio.opibuilder.widgets.gridLayout":
