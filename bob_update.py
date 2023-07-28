@@ -30,7 +30,7 @@ def bob_updating(bob_file, bob_dirname):
     root = tree.getroot()
 
     format = '%(asctime)s -  %(levelname)-8s - %(message)s'
-    logfile = bob_dirname + "/" + "Conversion_opi_to_bob.log"
+    logfile = bob_dirname + os.sep + "Conversion_opi_to_bob.log"
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.DEBUG)
     logging.basicConfig(format=format, level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S', force=True, handlers=[logging.FileHandler(logfile, mode='a'), stream_handler])

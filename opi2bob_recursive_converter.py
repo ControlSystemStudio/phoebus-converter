@@ -99,7 +99,7 @@ def main():
     #Resize opi and convert opi in bob
     for opi_file in opi_file_list:
         opi_subdir = os.path.dirname(opi_file)
-        head, sep, tail = opi_file.partition("/opi/")
+        head, sep, tail = opi_file.partition(os.sep + "opi" + os.sep)
         opi_dir = head + sep
 
         #Recreate the paths to the file inside bob and resized_opi folders
@@ -118,11 +118,12 @@ def main():
                 print(f"opi files in {opi_subdir} are not converted because they are not in a folder named 'opi' ")
                 continue
             
-            #Replicate the opi folder in a bob folder          
+            #Replicate the opi folder in a bob folder  
             if not os.path.exists(bob_subdir):
+                print(f"Creating the folder : {bob_subdir}")
                 shutil.copytree(opi_subdir, bob_subdir, symlinks = True, ignore=shutil.ignore_patterns('*.opi'))
-            elif opi_subdir == opi_dir_list_unique[0] :
-                print('bob folder already exists')
+            elif opi_subdir == opi_dir_list_unique[0]:
+                print(f"{bob_subdir} : the folder already exists and its contents may be different from the equivalent opi folder, you need to rename or delete it to generate a bob folder exactly like the opi folder.")
             
             #Case where a opi/opi/ folder exists
             BobOpi_dir_list = search_dirs("opi", bob_subdir)
