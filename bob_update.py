@@ -20,23 +20,24 @@
 #email: antoine.choquet@cea.fr
 #
 #contributor: Lea Perez
+#contributor : Mathis Huriez
 
 import xml.etree.ElementTree as ET
 import logging
 import os
 
-def bob_updating(bob_file, bob_dirname):
+def bob_updating(bob_file, bob_dirname, log):
     tree = ET.parse(bob_file)
     root = tree.getroot()
+    bob_file_name = os.path.basename(bob_file)
 
-    format = '%(asctime)s -  %(levelname)-8s - %(message)s'
-    logfile = bob_dirname + os.sep + "Conversion_opi_to_bob.log"
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.DEBUG)
-    logging.basicConfig(format=format, level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S', force=True, handlers=[logging.FileHandler(logfile, mode='a'), stream_handler])
-    
-    bob_file_name = os.path.basename(bob_file)  
-    logging.info(f"Updating: {bob_file_name} ")
+    if log :
+        format = '%(asctime)s -  %(levelname)-8s - %(message)s'
+        logfile = bob_dirname + os.sep + "Conversion_opi_to_bob.log"
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.DEBUG)
+        logging.basicConfig(format=format, level=logging.DEBUG, datefmt='%m/%d/%Y %I:%M:%S', force=True, handlers=[logging.FileHandler(logfile, mode='a'), stream_handler])
+        logging.info(f"Updating: {bob_file_name} ")
 
     i = 0
     j = 0
@@ -49,15 +50,17 @@ def bob_updating(bob_file, bob_dirname):
         if file is not None:
             opi = str(file.text)
             bob = str(opi.replace("opi","bob"))
+
             file.text = bob
             if same_bob == bob:
                 i += 1
                 same_bob = bob
             elif same_bob != "":
-                if i == 0 or i == 1:
-                    logging.debug(f"the link to the graphical interface: {same_bob} has been updated")
-                else:
-                    logging.debug(f"the link to the graphical interface: {same_bob} have been updated {i} times")
+                if log :
+                    if i == 0 or i == 1:
+                        logging.debug(f"the link to the graphical interface: {same_bob} has been updated")
+                    else:
+                        logging.debug(f"the link to the graphical interface: {same_bob} have been updated {i} times")
                 same_bob = bob
                 i = 0
             else:
@@ -65,10 +68,11 @@ def bob_updating(bob_file, bob_dirname):
                 same_bob = bob
 
     if same_bob != "":
-        if i == 0 or i == 1:
-            logging.debug(f"the link to the graphical interface: {same_bob} has been updated")
-        else:
-            logging.debug(f"the link to the graphical interface: {same_bob} have been updated {i} times")  
+        if log :
+            if i == 0 or i == 1:
+                logging.debug(f"the link to the graphical interface: {same_bob} has been updated")
+            else:
+                logging.debug(f"the link to the graphical interface: {same_bob} have been updated {i} times")  
 
     #Delete gridLayout widget
     for gridLayout in root.findall('widget'):
@@ -94,23 +98,24 @@ def bob_updating(bob_file, bob_dirname):
     for script in root.iter('script'):
         if script is not None:
             script = script.get('file')
-            if "changeMacroValue.js" in script:
-                logging.warning(f"the script: {script} can be remplaced by a simpler embedded script")
-            else:
-                logging.warning(f"the script: {script} may not work")
+            if log :
+                if "changeMacroValue.js" in script:
+                    logging.warning(f"the script: {script} can be remplaced by a simpler embedded script")
+                else:
+                    logging.warning(f"the script: {script} may not work")
         
+    if log :
+        if j !=0:
+            logging.debug(f"{i} gridLayout widgets have been removed")
         
-    if j !=0:
-        logging.debug(f"{i} gridLayout widgets have been removed")
-    
-    if k !=0:
-        logging.debug(f"{k} polyline widgets have been updated")
+        if k !=0:
+            logging.debug(f"{k} polyline widgets have been updated")
 
-    if l !=0:
-        if l ==1:
-            logging.warning(f"there is 1 xyplot that might have a different behavior")
-        else:
-            logging.warning(f"there are {l} xyplot that might have a different behavior")
+        if l !=0:
+            if l ==1:
+                logging.warning(f"there is 1 xyplot that might have a different behavior")
+            else:
+                logging.warning(f"there are {l} xyplot that might have a different behavior")
 
     tree.write(bob_file, xml_declaration=True, method='xml', encoding='UTF-8')
 
