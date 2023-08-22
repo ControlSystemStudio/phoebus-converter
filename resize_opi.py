@@ -20,6 +20,7 @@
 #email: antoine.choquet@cea.fr
 #
 #contributor: Lea Perez
+#contributor: Mathis Huriez
 
 import xml.etree.ElementTree as ET
 
@@ -62,9 +63,11 @@ def opi_resizing(opi_file):
 	ordo.sort()
 	absc.sort()
 	for height in root.findall("height"):
-		height.text = str(ordo[-1])
+		if len(ordo) > 0:
+			height.text = str(ordo[-1])
 	for width in root.findall("width"):
-		width.text = str(absc[-1]) 
+		if len(absc) > 0:
+			width.text = str(absc[-1]) 
 	tree.write(opi_file, xml_declaration=True, method='xml', encoding='UTF-8')
 
 
