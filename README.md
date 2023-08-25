@@ -28,6 +28,9 @@ By default, it will place created bob files next to opi files for each folder an
   -l, --log :  
   Add log file(s) when conversion is finished
 
+  -o, --override
+  Override previous converted bob files (but not other bob files).
+
   -bd, --bobdir :  
   The converted files are placed in a bob directory with  the same content, such as symbolic links, scripts or other documents as the opi folder
 

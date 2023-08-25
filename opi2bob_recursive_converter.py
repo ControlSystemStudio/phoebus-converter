@@ -24,6 +24,7 @@
 
 import argparse
 from ast import arg
+from genericpath import exists
 import os
 import subprocess
 import re
@@ -119,6 +120,7 @@ def main():
 
     opi_dir_list_unique = []
     bob_dir_list_unique = []
+    previous_bob_dir_list_unique = []
     opi_resized_dir_list = []
 
     #Check if inputFolder exists and is a folder 
@@ -163,7 +165,7 @@ def main():
         else :
             sep_bob = re.sub(match, match + "_bob", sep)
             sep_resized_opi = re.sub(match, match + "_resized_opi", sep)
-        tail_bob = re.sub(".opi", ".bob", tail)
+        tail_bob = re.sub(r"\.opi$", ".bob", tail)
         path_to_bob_file = head + sep_bob + tail_bob
         path_to_resized_opi_file = head + sep_resized_opi + tail
         bob_dir = head + sep_bob
@@ -192,6 +194,20 @@ def main():
             else :
                 bob_subdir = opi_subdir
                 bob_dir = opi_dir
+
+            # Delete previous converted bob files (but not other bob files)                 
+            if args.override:
+                if bob_subdir not in previous_bob_dir_list_unique:
+                    previous_bob_dir_list_unique.append(bob_subdir)
+                    previous_bob_file_list = search_files(".bob", bob_subdir)
+                    sub_opi_file_list = search_files(".opi", opi_subdir)
+                    for previous_bob_file in previous_bob_file_list:
+                        if os.path.exists(previous_bob_file):
+                            for sub_opi_file in sub_opi_file_list:
+                                compare = re.sub(r"\.opi$", ".bob", os.path.basename(sub_opi_file))
+                                if compare == os.path.basename(previous_bob_file):
+                                    os.remove(previous_bob_file)
+                                    print(f"Previous bob file : {previous_bob_file} deleted")
 
             #Resize
             opi_resized_dir = head + sep_resized_opi
@@ -225,7 +241,7 @@ def main():
             if os.path.islink(opi_file) :
                 path_to_opi = os.path.dirname(opi_file)
                 path_to_bob = re.sub(match, "bob", path_to_opi)
-                bob_link = re.sub(".opi", ".bob", opi_file)
+                bob_link = re.sub(r"\.opi$", ".bob", opi_file)
                 os.remove(bob_link)
                 source = os.readlink(opi_file)
                 source_bob = re.sub(match, "bob", source)
@@ -252,6 +268,7 @@ Description :
     parser.add_argument("-f" , "--filter", help="Add a filter for specific folder's files to be converted, * to front and/or back are supported as regex, Warning !! The filter is case sensitive ; e.g. -f opi")
     parser.add_argument("-j" , "--java", help="Specify the java binary path manually ; e.g. -j C:\\Dev\\java\\windows-jdk-16.0.2\\bin\\java")
     parser.add_argument("-l" , "--log", action="store_true", help="Add log file(s) when conversion is finished")
+    parser.add_argument("-o" , "--override", action="store_true", help="Override previous converted bob files (but not other bob files)")
     parser.add_argument("-bd" , "--bobdir", action="store_true", help="The converted files are placed in a bob directory with  the same content, such as symbolic links, scripts or other documents as the opi folder")
     parser.add_argument('opi_folder', help='Path to the folder which contains the CSS opi files to convert ; e.g. C:\\path_to_folder\\folder')
     parser.add_argument('phoebus_folder', help='Path to the phoebus installation folder ; e.g. C:\\Software\\Phoebus\\phoebus-4.7.3')
