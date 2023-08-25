@@ -1,6 +1,10 @@
 # CSS - Phoebus converter 
 
-This python scripts resize CSS opi windows, convert all CSS opi files to Phoebus bob files, and then update the Phoebus bob files.
+This python scripts resize CSS opi windows, convert all CSS resized opi files to Phoebus bob files, and then update the Phoebus bob files.
+
+The originals opi are not affected by the script, duplicated opi files are being resized, and are deleted after the conversion.
+
+The resizing step usefulness is to prevent phoebus embedded displays to scale with the window size rather than widgets size in the display.
 
 By default, it will place created bob files next to opi files for each folder and subfolder of the user specified folder.
 
