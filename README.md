@@ -13,7 +13,7 @@ By default, it will place created bob files next to opi files for each folder an
   Path to the folder which contains the CSS opi files to convert ; e.g. C:\path_to_folder\folder
 
   phoebus_folder :  
-  Path to the phoebus installation folder ; e.g. C:\Software\Phoebus\phoebus-4.7.3
+  Path to the phoebus installation folder, phoebus folder is required to use the opi2bob converter ; e.g. C:\Software\Phoebus\phoebus-4.7.3
 
 ## optional arguments:
   -h, --help :  

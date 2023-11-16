@@ -102,9 +102,15 @@ def conversion(opi_subdir, bob_subdir, phoebusFolder):
     return
 
 def main():
-    inputFolder = args.opi_folder
-    phoebusFolder = args.phoebus_folder
+    inputFolder = os.path.normpath(args.opi_folder)
+    phoebusFolder = os.path.normpath(args.phoebus_folder)
     parentFolder = os.path.abspath(os.path.join(inputFolder, os.pardir))
+
+    if inputFolder.endswith(os.path.sep):
+        inputFolder = inputFolder[:-1]
+
+    if phoebusFolder.endswith(os.path.sep):
+        phoebusFolder = phoebusFolder[:-1]
 
     #Delete former resized_opi folder(s) if it exists
     for resized_dir in search_dirs("resized_opi", parentFolder):
@@ -271,7 +277,7 @@ Description :
     parser.add_argument("-o" , "--override", action="store_true", help="Override previous converted bob files (but not other bob files)")
     parser.add_argument("-bd" , "--bobdir", action="store_true", help="The converted files are placed in a bob directory with  the same content, such as symbolic links, scripts or other documents as the opi folder")
     parser.add_argument('opi_folder', help='Path to the folder which contains the CSS opi files to convert ; e.g. C:\\path_to_folder\\folder')
-    parser.add_argument('phoebus_folder', help='Path to the phoebus installation folder ; e.g. C:\\Software\\Phoebus\\phoebus-4.7.3')
+    parser.add_argument('phoebus_folder', help='Path to the phoebus installation folder, phoebus folder is required to use the opi2bob converter ; e.g. C:\\Software\\Phoebus\\phoebus-4.7.3')
     
     args = parser.parse_args()
     
