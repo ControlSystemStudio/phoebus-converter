@@ -35,16 +35,16 @@ By default, it will place created bob files next to opi files for each folder an
   The converted files are placed in a bob directory with  the same content, such as symbolic links, scripts or other documents as the opi folder
 
 ### Usage on Windows :
-`Python_Bin_Path` `Script_Path` `Opi_folder_Path` `Phoebus_Installation_Path`
+`Python_Bin_Path  Script_Path  Opi_folder_Path  Phoebus_Installation_Path`
 
-e.g. : `D:\python_windows\python` `D:\Phoebus\phoebus-4.7.2\tools\opi2bob_recursive_converter.py` `D:\EPICS\IOC\opi` `D:\Phoebus\phoebus-4.7.2`
+e.g. : `D:\python_windows\python D:\Phoebus\phoebus-4.7.2\tools\opi2bob_recursive_converter.py D:\EPICS\IOC\opi D:\Phoebus\phoebus-4.7.2`
 
 ### Usage on Linux :
-`python` `Script_Path` `Opi_folder_Path` `Phoebus_Installation_Path`
+`python  Script_Path  Opi_folder_Path  Phoebus_Installation_Path`
 
-e.g. : `python` `/home/user/phoebus-4.7.2/tools/opi2bob_recursive_converter.py` `/home/epics/ioc/opi` `/home/user/phoebus-4.7.2`
+e.g. : `python opi2bob_recursive_converter.py -j <path_to_phoebus_folder>/java/linux-jdk/bin/java -bd <path_to_topEpics> <path_to_phoebus_folder>/javafx:<path_to_phoebus_folder>`
 
-
+`topEpics` refers to a folder with several EPICS applications in which there are a multitude of folders containing a multitude of bob files.
 
 ### Example of optional arguments usage :
 - The usage : `D:\python_windows\python D:\Phoebus\phoebus-4.7.2\tools\opi2bob_recursive_converter.py -h`  
